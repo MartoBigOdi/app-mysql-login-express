@@ -2,7 +2,7 @@ const { Router } = require('express');
 const router = Router();
 
 router.get('/', (req,res) => {
-    res.send('Hola Putos')
+    res.send('Probanding')
 });
 
 module.exports = router;
