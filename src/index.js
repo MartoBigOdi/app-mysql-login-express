@@ -13,7 +13,7 @@ app.set('port', process.env.PORT || 3050);//Si nos dan un puerto lo utilizamos s
 app.set('views', path.join(__dirname, 'views'));//Recordemos que '_dirname' nos devuelve la carpeta donde se ejecuta la constante (_dirname); entonces concatenamos con la carpeta 'views'.
 app.engine('.hbs', exphbs ({//Configuramos el motor de vista
     defaultLayout: 'main',
-    layoutsDir: path.join(app.get('views'), 'layoutas'),
+    layoutsDir: path.join(app.get('views'), 'layouts'),
     partialsDir: path.join(app.get('views'), 'partials'),
     extname:'.hbs',
     helpers: require('./lib/handlebars')
