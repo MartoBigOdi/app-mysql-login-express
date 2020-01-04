@@ -41,7 +41,7 @@ app.use(express.json());
 
 
 //Variables globales
-//Acá desde las variables globales hacemos disponibles el mensaje para mis vistas.
+//Acá le indicamos que los msjes de flash se pueden utilizar en todas las vitas donde se soliciten.
 app.use((req, res, next) =>{
  app.locals.ok = req.flash('ok');
  app.locals.borrada = req.flash('borrada');
