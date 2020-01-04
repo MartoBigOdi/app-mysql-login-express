@@ -39,4 +39,4 @@ CREATE TABLE seguimientoTareas(
 ALTER TABLE seguimientoTareas
     MODIFY id INT(11) AUTO_INCREMENT NOT NULL;
 
-    
+ DROP TABLE seguimientoTareas; --->Si queremos borrar la tabla ponemos esto, luego podemos hacer de nuevo la query apra crearla, más que nada por si necesitamos volver a contar con el Id dsd 1. 

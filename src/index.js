@@ -4,6 +4,12 @@ const figlet = require('figlet');
 const color = require('colors');
 const exphbs =require('express-handlebars');
 const path = require('path');
+const flash = require('connect-flash');
+//flash requiere almacenar el msj en una session puede ser en el servidor o en la base de datos. 
+const session = require('express-session');
+//Módulo para poder conectar la base de datos con la session.
+const MySQLStore = require('express-mysql-session');
+const { database } = require('./keys');
 
 //Inicializaciones
 const app = express();
@@ -21,9 +27,27 @@ app.engine('.hbs', exphbs ({//Configuramos el motor de vista
 app.set('view engine', '.hbs')//Iniciamos el motor de plantilla y le decimos que ext tiene que tener.
 
 //Midleware 
+//Configuramos la session
+app.use(session({
+    secret: 'marto',
+    resave:false,
+    saveUninitialized: false,
+    store: new MySQLStore(database)
+}));
+app.use(flash());
 app.use(logger('dev'))//Este parametro nos muestra un determinado tipo de mensaje por consola. vemos los tipos de petición. y Si fue positiva la peti. 
 app.use(express.urlencoded({extended: false}));
 app.use(express.json());
+
+
+//Variables globales
+//Acá desde las variables globales hacemos disponibles el mensaje para mis vistas.
+app.use((req, res, next) =>{
+ app.locals.ok = req.flash('ok');
+ app.locals.borrada = req.flash('borrada');
+    next();
+});
+
 
 //Routes
 app.use(require('./routes/index'));
