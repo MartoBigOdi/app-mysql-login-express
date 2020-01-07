@@ -9,10 +9,17 @@ const flash = require('connect-flash');
 const session = require('express-session');
 //Módulo para poder conectar la base de datos con la session.
 const MySQLStore = require('express-mysql-session');
+const passport = require('passport');
 const { database } = require('./keys');
+
+
+
 
 //Inicializaciones
 const app = express();
+require('./lib/passport');//Acá nuestra app se entera de la auth que hicimos con 'passport.js'.
+
+
 
 //Settings
 app.set('port', process.env.PORT || 3050);//Si nos dan un puerto lo utilizamos sino seteamos uno 3050. 
@@ -26,6 +33,9 @@ app.engine('.hbs', exphbs ({//Configuramos el motor de vista
 }));
 app.set('view engine', '.hbs')//Iniciamos el motor de plantilla y le decimos que ext tiene que tener.
 
+
+
+
 //Midleware 
 //Configuramos la session
 app.use(session({
@@ -38,6 +48,11 @@ app.use(flash());
 app.use(logger('dev'))//Este parametro nos muestra un determinado tipo de mensaje por consola. vemos los tipos de petición. y Si fue positiva la peti. 
 app.use(express.urlencoded({extended: false}));
 app.use(express.json());
+//Acá seteamos 'passport'.
+app.use(passport.initialize());
+app.use(passport.session());
+
+
 
 
 //Variables globales
@@ -49,12 +64,17 @@ app.use((req, res, next) =>{
 });
 
 
+
+
 //Routes
 app.use(require('./routes/index'));
 app.use(require('./routes/authentication'));
 app.use('/follow',require('./routes/follow'));
 //Public 
 app.use(express.static(path.join(__dirname, 'public')));
+
+
+
 
 //Start Server
 app.listen(app.get('port'), () => {
