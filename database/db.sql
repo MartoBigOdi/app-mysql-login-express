@@ -12,7 +12,7 @@ CREATE TABLE users(
     cargo VARCHAR(60) NOT NULL
     );
 
------->Acá agrego una caracteristica a 'id'
+------>Acá agrego una caracteristica a 'id' pero en este caso lo agregamos anteriormente.
 ALTER TABLE users
     ADD PRIMARY KEY (id);
 

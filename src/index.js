@@ -10,8 +10,9 @@ const session = require('express-session');
 //Módulo para poder conectar la base de datos con la session.
 const MySQLStore = require('express-mysql-session');
 const passport = require('passport');
-const { database } = require('./keys');
 
+//Acá traemos nuestro módulo de la base de datos. ya hecho antes.
+const { database } = require('./keys');
 
 
 
