@@ -6,6 +6,13 @@ const LocalStrategy = require('passport-local').Strategy;
 const pool = require('../database');
 const helpers = require('../lib/helpers');
 
+
+//passport.use('login.local', new LocalStrategy({
+
+//}));
+
+
+
 //Acá elegimos la estrategia con la cual nos vamos a registrar, en este caso la estrategia es LOCAL(Vamos a usar nuestra de base de datos), Instanciamos new LocalStrategy para crear el objeto.
 //passport.use()---> tiene dos parametros, el nombre de la estrategia y el tipo de estrategia que vamos a utilizar que es un objeto instanciado.
 passport.use('registro.local', new LocalStrategy({
@@ -25,11 +32,22 @@ passport.use('registro.local', new LocalStrategy({
         newUser.password = await helpers.encryptPassword(password);
         //Acá estamos 'INSERT INTO a la tabla 'users'' el nuevo user que instanciamos con los datos recibidos. 
         const result = await pool.query('INSERT INTO users SET ?', [newUser]);
+        //Acá le agregamos el 'id' desde la propiedad que tiene 'result'.
+        newUser.id = result.insertId;
         console.log(result);
+        //Aca devolvemos NULL al callback del 'done' para que siga ejecutando el codigo siguiente.
+        return done(null, newUser);
 }));
 
 //La documentaciñon de passport índica que necesitamos hacer pasos más una vez hecha la estrategia, primero serializar y luego deserializar.
-//passport.serializeUser((user, done) => {
-        
-//});
+passport.serializeUser((user, done) => {
+        done(null, user.id);
+});
+
+passport.deserializeUser(async (id, done) => {
+        //Lo guardamos en una const porque eso devuelve un array.
+       const fila = await pool.query('SELECT * FROM users where id = ?', [id]);
+       //Le hacemos 'null' al callback del 'done' y le pedimos del objeto 'fila' la posición 0 porque es la información que necesitamos. 
+       done(null, fila[0]);
+});
 
