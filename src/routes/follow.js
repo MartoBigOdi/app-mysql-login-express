@@ -1,20 +1,22 @@
 const { Router } = require('express');
 const router = Router();
+const { estalogeado } = require('../lib/proteccion');
 
 //Este pool hace referencia a la base de datos.
 const pool = require('../database');
 
 
-router.get('/agregar', (req, res) => {
+router.get('/agregar', estalogeado, (req, res) => {
     res.render('follow/agregar');
 });
 
-router.post('/agregar', async (req, res) => {
+router.post('/agregar', estalogeado, async (req, res) => {
     const { title, urgencia, descripción } = req.body;
     const newFollow = {
         title,
         urgencia,
-        descripción
+        descripción,
+        user_id: req.user.id,
     };
     //utilizamos la conexión a mysql 'pool' y vamos a hacer una query para pasarle los datos. en este caso es el objeto 'newFollow'. Es una petición asincrona 
     await pool.query('INSERT INTO seguimientoTareas set ?', [newFollow]);
@@ -33,8 +35,8 @@ router.get('/delete/:id', async (req, res) => {
 });
 
 //Esta ruta tiene el prefijo '/follow' que lo da el servidor directamente porque nososotros lo modificamos así.
-router.get('/', async (req, res) => {
-    const follow =  await pool.query('SELECT * FROM seguimientoTareas');
+router.get('/', estalogeado,  async (req, res) => {
+    const follow =  await pool.query('SELECT * FROM seguimientoTareas WHERE user_id = ?', [req.user.id]);
     console.log(follow);
     res.render('follow/list', { follow: follow });
 });

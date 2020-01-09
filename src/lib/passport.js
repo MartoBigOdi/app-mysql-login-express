@@ -19,7 +19,7 @@ passport.use('login.local', new LocalStrategy({
                 const user = filas[0];
                 const passValido = await helpers.matchPassword(password, user.password);//Esto devuelve un booleano.
                 if(passValido){ //Si passValido es 'true' seguimos con el 'done' normal y le enviamos un msj con flash.
-                        done(null, user, req.flash('correcto' ,'Buenas' + user.username));//Acordarse que req.flash LLEVA dos parametros, primero el nombre del msj y luego el msj en si. 
+                        done(null, user, req.flash('correcto' ,'Buenas ' + user.username));//Acordarse que req.flash LLEVA dos parametros, primero el nombre del msj y luego el msj en si. 
                 } else {
                         done(null, false, req.flash('message', 'Password Incorrecto'));
                 }

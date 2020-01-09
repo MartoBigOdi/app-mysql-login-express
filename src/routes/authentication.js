@@ -1,10 +1,11 @@
 const { Router } = require('express');
 const router = Router();
 const passport = require('passport');
+const { estalogeado, filtroLogeado, adminSOlo } = require('../lib/proteccion');
 
 
 
-router.get('/registro', (req, res) => {
+router.get('/registro', filtroLogeado ,(req, res) => {
     res.render('auth/registroDeUsuario')
 });
 
@@ -15,7 +16,12 @@ router.post('/registro', passport.authenticate('registro.local', {
     }),
 );
 
-router.get('/login', (req, res) => {
+router.get('/logout', (req, res) => {
+    req.logOut();
+    res.redirect('/login');
+});
+
+router.get('/login', filtroLogeado ,(req, res) => {
     res.render('auth/login')
 });
 
@@ -26,7 +32,8 @@ router.post('/login', passport.authenticate('login.local', {
     }),
 );
 
-router.get('/profile' ,(req, res) => {
+
+router.get('/profile', estalogeado ,(req, res) => {
     res.render('profile');//Como no esta en ninguna carpeta le pasamos directamente el nombre 'profile'.
 })
 

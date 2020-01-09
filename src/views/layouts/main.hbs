@@ -19,8 +19,12 @@
 </head>
 <body>
     
-    {{> navegacion }}
-
+    {{#if user}}
+    {{> navegacionPerfil }}
+    {{else}}
+    {{> navegacion}}
+    {{/if}}
+    
     {{> mensajes }}
 
     {{{ body }}}
