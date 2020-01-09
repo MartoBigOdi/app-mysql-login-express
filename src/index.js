@@ -23,7 +23,7 @@ require('./lib/passport');//Acá nuestra app se entera de la auth que hicimos co
 
 
 //Settings
-app.set('port', process.env.PORT || 3050);//Si nos dan un puerto lo utilizamos sino seteamos uno 3050. 
+app.set('port', process.env.PORT || 3051);//Si nos dan un puerto lo utilizamos sino seteamos uno 3050. 
 app.set('views', path.join(__dirname, 'views'));//Recordemos que '_dirname' nos devuelve la carpeta donde se ejecuta la constante (_dirname); entonces concatenamos con la carpeta 'views'.
 app.engine('.hbs', exphbs ({//Configuramos el motor de vista
     defaultLayout: 'main',
@@ -61,6 +61,8 @@ app.use(passport.session());
 app.use((req, res, next) =>{
  app.locals.ok = req.flash('ok');
  app.locals.borrada = req.flash('borrada');
+ app.locals.message = req.flash('message');
+ app.locals.correcto = req.flash('correcto');
     next();
 });
 

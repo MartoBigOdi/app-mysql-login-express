@@ -15,8 +15,19 @@ router.post('/registro', passport.authenticate('registro.local', {
     }),
 );
 
+router.get('/login', (req, res) => {
+    res.render('auth/login')
+});
+
+router.post('/login', passport.authenticate('login.local', {
+    successRedirect: '/profile',
+    failureRedirect: '/login',
+    failureFlash: true,
+    }),
+);
+
 router.get('/profile' ,(req, res) => {
-    res.send('Profile');
+    res.render('profile');//Como no esta en ninguna carpeta le pasamos directamente el nombre 'profile'.
 })
 
 module.exports = router;

@@ -6,10 +6,28 @@ const LocalStrategy = require('passport-local').Strategy;
 const pool = require('../database');
 const helpers = require('../lib/helpers');
 
-
-//passport.use('login.local', new LocalStrategy({
-
-//}));
+//Acá en el Log in hacemos algo muy parecido que en el registro solamente que que en este caso vamos a utiliår el 'herlpersMatchpass' para comparar la password que nos pasan con la que tenemos en la base de datos. 
+passport.use('login.local', new LocalStrategy({
+        usernameField: 'username',
+        passwordField: 'password',
+        passReqToCallback: true,
+}, async (req, username, password, done) => {
+        console.log(req.body);
+        //Acá hacemos la petición con la query para buscar la coincidencia con el username. 
+        const filas = await pool.query('SELECT * FROM users WHERE username = ?', [username]);
+        if(filas.length > 0) { //Si es mayor a 0 significa que encontramos al usuario.
+                const user = filas[0];
+                const passValido = await helpers.matchPassword(password, user.password);//Esto devuelve un booleano.
+                if(passValido){ //Si passValido es 'true' seguimos con el 'done' normal y le enviamos un msj con flash.
+                        done(null, user, req.flash('correcto' ,'Buenas' + user.username));//Acordarse que req.flash LLEVA dos parametros, primero el nombre del msj y luego el msj en si. 
+                } else {
+                        done(null, false, req.flash('message', 'Password Incorrecto'));
+                }
+        } else {
+                return done(null, false, req.flash('message', 'EL usuario NO existe'));//Si el usuario esta mal no lo dejamos ingresar al sistema y le enviamos un msj diciendo que 
+        }
+        
+}));
 
 
 
@@ -39,15 +57,18 @@ passport.use('registro.local', new LocalStrategy({
         return done(null, newUser);
 }));
 
-//La documentaciñon de passport índica que necesitamos hacer pasos más una vez hecha la estrategia, primero serializar y luego deserializar.
+
+
+//La documentaciñon de passport índica que necesitamos hacer dos pasos más una vez hecha la estrategia, primero serializar y luego deserializar.
 passport.serializeUser((user, done) => {
         done(null, user.id);
 });
 
+
 passport.deserializeUser(async (id, done) => {
         //Lo guardamos en una const porque eso devuelve un array.
-       const fila = await pool.query('SELECT * FROM users where id = ?', [id]);
+       const filas = await pool.query('SELECT * FROM users where id = ?', [id]);
        //Le hacemos 'null' al callback del 'done' y le pedimos del objeto 'fila' la posición 0 porque es la información que necesitamos. 
-       done(null, fila[0]);
+       done(null, filas[0]);
 });
 

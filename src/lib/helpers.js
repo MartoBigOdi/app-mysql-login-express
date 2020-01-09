@@ -16,7 +16,7 @@ helpers.encryptPassword = async (password) => {
 //Acá comparamos el password con el password guardado en la base de datos.
 helpers.matchPassword = async (password, savedPassword) => {
     try {
-        await encrypt.compare(password, savedPassword);
+        return await encrypt.compare(password, savedPassword);//No olvidarse de retornar el resultado de la consulta. 
     } catch(e) {
         console.log(e);
     };
