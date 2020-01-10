@@ -25,6 +25,7 @@ router.post('/agregar', estalogeado, async (req, res) => {
     res.redirect('/follow');
 });
 
+
 //Cuando nos manden a esta dirección con el id especificado lo manejamos con un DELETE.
 router.get('/delete/:id', async (req, res) => {
      const { id } = req.params; 
