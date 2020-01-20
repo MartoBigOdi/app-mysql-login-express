@@ -1,7 +1,7 @@
 const { Router } = require('express');
 const router = Router();
 const passport = require('passport');
-const { estalogeado, filtroLogeado, adminSOlo } = require('../lib/proteccion');
+const { estalogeado, filtroLogeado } = require('../lib/proteccion');
 
 
 

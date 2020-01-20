@@ -1,6 +1,6 @@
 const { Router } = require('express');
 const router = Router();
-const { estalogeado, filtroLogeado } = require('../lib/proteccion');
+const { filtroLogeado } = require('../lib/proteccion');
  
 
 router.get('/', filtroLogeado , (req,res) => {

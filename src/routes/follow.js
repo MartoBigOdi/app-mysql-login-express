@@ -12,14 +12,14 @@ router.get('/agregar', estalogeado, (req, res) => {
 
 router.post('/agregar', estalogeado, async (req, res) => {
     const { title, urgencia, descripción } = req.body;
-    const newFollow = {
+    const nuevaTarea = {
         title,
         urgencia,
         descripción,
         user_id: req.user.id,
     };
     //utilizamos la conexión a mysql 'pool' y vamos a hacer una query para pasarle los datos. en este caso es el objeto 'newFollow'. Es una petición asincrona 
-    await pool.query('INSERT INTO seguimientoTareas set ?', [newFollow]);
+    await pool.query('INSERT INTO seguimientoTareas set ?', [nuevaTarea]);
     //Tiene dos parametros uno es el nombre con el cual vamos guardar el mensaje y el otro es el mensaje en si.
     req.flash('ok', 'Tarea Guardada correctamente');
     res.redirect('/follow');
