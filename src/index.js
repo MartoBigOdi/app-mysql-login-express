@@ -63,6 +63,7 @@ app.use((req, res, next) =>{
  app.locals.borrada = req.flash('borrada');
  app.locals.message = req.flash('message');
  app.locals.correcto = req.flash('correcto');
+ app.locals.usuarioRepetido = req.flash('usuarioRepetido');
  app.locals.user = req.user;//De esta manera podemos mostrar el user que tenemos guardado en la session dsp del login o registro. En cualquier vista. 
  next();
 });

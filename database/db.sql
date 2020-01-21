@@ -40,3 +40,9 @@ ALTER TABLE seguimientoTareas
     MODIFY id INT(11) AUTO_INCREMENT NOT NULL;
 
  DROP TABLE seguimientoTareas; --->Si queremos borrar la tabla ponemos esto, luego podemos hacer de nuevo la query apra crearla, más que nada por si necesitamos volver a contar con el Id dsd 1. 
+
+
+----->Query para ingresar Tarea según el ID en la tabla 'seguimientoTareas'.
+ insert into seguimientoTareas(id,title,urgencia,descripción,user_id) values(2,'Terminar la APP del laburo','15 días','Mejorar lo más que se pueda en SQL y Terminar el programa para el trabajo',1);
+----->O podemos insertar también de manera directa los valores. 
+  insert into seguimientoTareas values(2,'Terminar la APP del laburo','15 días','Mejorar lo más que se pueda en SQL y Terminar el programa para el trabajo',1);

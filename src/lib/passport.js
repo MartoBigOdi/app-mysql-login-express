@@ -30,7 +30,6 @@ passport.use('login.local', new LocalStrategy({
 }));
 
 
-
 //Acá elegimos la estrategia con la cual nos vamos a registrar, en este caso la estrategia es LOCAL(Vamos a usar nuestra de base de datos), Instanciamos new LocalStrategy para crear el objeto.
 //passport.use()---> tiene dos parametros, el nombre de la estrategia y el tipo de estrategia que vamos a utilizar que es un objeto instanciado.
 passport.use('registro.local', new LocalStrategy({
@@ -46,15 +45,23 @@ passport.use('registro.local', new LocalStrategy({
                 fullname,
                 cargo,
         };
-        //Acá ciframos la contraseña con el método que traemos desde el 'lib/helpers'.
-        newUser.password = await helpers.encryptPassword(password);
-        //Acá estamos 'INSERT INTO a la tabla 'users'' el nuevo user que instanciamos con los datos recibidos. 
-        const result = await pool.query('INSERT INTO users SET ?', [newUser]);
-        //Acá le agregamos el 'id' desde la propiedad que tiene 'result'.
-        newUser.id = result.insertId;
-        console.log(result);
-        //Aca devolvemos NULL al callback del 'done' para que siga ejecutando el codigo siguiente.
-        return done(null, newUser);
+        //Acá hacemos la petición con la query para buscar la coincidencia con el username. 
+        const userNew = await pool.query('SELECT * FROM users WHERE username = ?', [username]);
+        //Hacemos un Condicional con una query para buscar si ya existe ese usuario.
+        if(userNew.length > 0) {
+                done(null, false, req.flash('usuarioRepetido', 'Usuario ya existente'));
+        } else {
+                //Acá ciframos la contraseña con el método que traemos desde el 'lib/helpers'.
+                newUser.password = await helpers.encryptPassword(password);
+                //Acá estamos 'INSERT INTO a la tabla 'users'' el nuevo user que instanciamos con los datos recibidos. 
+                const result = await pool.query('INSERT INTO users SET ?', [newUser]);
+                //Acá le agregamos el 'id' desde la propiedad que tiene 'result'.
+                newUser.id = result.insertId;
+                console.log(result);
+                //Aca devolvemos NULL al callback del 'done' para que siga ejecutando el codigo siguiente.
+                return done(null, newUser);
+         }
+        
 }));
 
 
