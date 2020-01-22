@@ -46,9 +46,10 @@ passport.use('registro.local', new LocalStrategy({
                 cargo,
         };
         //Acá hacemos la petición con la query para buscar la coincidencia con el username. 
-        const userNew = await pool.query('SELECT * FROM users WHERE username = ?', [username]);
+        const userNameNew = await pool.query('SELECT * FROM users WHERE username = ?', [username]);
+        const fullNameNew = await pool.query('SELECT * FROM users WHERE fullname = ?', [fullname]);
         //Hacemos un Condicional con una query para buscar si ya existe ese usuario.
-        if(userNew.length > 0) {
+        if(userNameNew.length > 0 || fullNameNew.length > 0) {
                 done(null, false, req.flash('usuarioRepetido', 'Usuario ya existente'));
         } else {
                 //Acá ciframos la contraseña con el método que traemos desde el 'lib/helpers'.
