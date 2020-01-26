@@ -27,7 +27,7 @@ DESCRIBE users;
 
 ------>Creamos tabla de contenidos para cada usuario. 
 CREATE TABLE seguimientoTareas(
-    id INT(11) PRIMARY KEY NOT NULL,
+    id INT(11) PRIMARY KEY NOT NULL AUTO_INCREMENT,
     title VARCHAR(150) NOT NULL,
     urgencia VARCHAR(150) NOT NULL,
     descripción TEXT,
@@ -38,6 +38,16 @@ CREATE TABLE seguimientoTareas(
 
 ALTER TABLE seguimientoTareas
     MODIFY id INT(11) AUTO_INCREMENT NOT NULL;
+
+CREATE TABLE seguimientoTareas2(
+    id INT(11) PRIMARY KEY NOT NULL AUTO_INCREMENT,
+    title VARCHAR(150) NOT NULL,
+    urgencia VARCHAR(150) NOT NULL,
+    descripción TEXT,
+    user_id INT(11),
+    tiempoDeCreación timestamp NOT NULL DEFAULT current_timestamp,
+    CONSTRAINT fk_userTabla2 FOREIGN KEY (user_id) REFERENCES users(id)
+);
 
  DROP TABLE seguimientoTareas; --->Si queremos borrar la tabla ponemos esto, luego podemos hacer de nuevo la query apra crearla, más que nada por si necesitamos volver a contar con el Id dsd 1. 
 

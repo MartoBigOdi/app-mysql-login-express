@@ -42,4 +42,31 @@ router.get('/', estalogeado,  async (req, res) => {
     res.render('follow/list', { follow: follow });
 });
 
+//Ruta Para agregar Tareas a los users desde un dashboard
+router.get('/dashboard', estalogeado, async (req, res) => {
+    const users  = await pool.query('SELECT * FROM users');
+    console.table(users);
+    const tablaTareas  = await pool.query('SELECT * FROM seguimientoTareas');
+    console.table(tablaTareas);
+    res.render('follow/dashboard', { users, tablaTareas });
+});
+
+router.post('/dashboard', estalogeado , async (req, res) => {
+    const { title, urgencia, descripción, idUser } = req.body;
+    const nuevaTarea = {
+        title,
+        urgencia,
+        descripción,
+        user_id: idUser
+    };
+    //utilizamos la conexión a mysql 'pool' y vamos a hacer una query para pasarle los datos. en este caso es el objeto 'newFollow'. Es una petición asincrona 
+    await pool.query('INSERT INTO seguimientoTareas set ?', [nuevaTarea]);
+    await pool.query('INSERT INTO seguimientoTareas2 set ?', [nuevaTarea]);
+    //Tiene dos parametros uno es el nombre con el cual vamos guardar el mensaje y el otro es el mensaje en si.
+    req.flash('ok', 'Tarea Guardada correctamente');
+    res.redirect('/profile');
+});
+
+
+
 module.exports = router;
