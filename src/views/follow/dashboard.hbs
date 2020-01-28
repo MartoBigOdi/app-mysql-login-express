@@ -1,6 +1,11 @@
+<div>
+    <h3 class="">
+        ASIGNAR TAREA 
+    </h3>
+</div>
 <div class="container p-4 animation-target">
     <div class="row">
-        <div class="col-md-4 mx-auto">
+        <div class="col-md-8 mx-auto">
             <div class="card">
                 <div class="card-body">
                    <form action="/follow/dashboard" method="POST">
@@ -27,16 +32,21 @@
         </div>
     </div>
 </div>
+<div>
+    <h3 class="">
+        EQUIPO 
+    </h3>
+</div>
 <div class="container p-4">
     <div class="row">
         {{#each users}}
-            <div class="div col-md-3 p-2">
+            <div class="col-mt-3 p-2">
                 <div class="card text-center">
                     <div class="card-body">
                         <h4 class="card-title text-uppercase">
                         {{fullname}}
                         </h4>
-                        <p class="m-2">Usuario: <strong>{{username}}</strong></p>
+                        <p class="m-2 list-group-item-info">Usuario: <strong>{{username}}</strong></p>
                         <p class="m-2">Id:  <strong>{{id}}</strong></p> 
                         <p class="m-2">Cargo:  {{cargo}}</p> 
                     </div>
@@ -51,16 +61,21 @@
         {{/each}}
     </div>
 </div>
+<div>
+    <h3 class="text-align list-group-horizontal">
+        TAREAS DADAS 
+    </h3>
+</div>
 <div class="container p-4">
-    <ul class="list-group list-group-horizontal-xl">
-        {{#each tablaTareas}} 
-        <div class="col-md-6">
+    {{#each tablaTareas}} 
+    <div class="col-md-8 p-2 text-align mx-auto">
+    <ul class="list-group list-group-horizontal">
         <li class="list-group-item">Título: {{title}}</li>
         <li class="list-group-item">Urgencia: {{urgencia}}</li>
         <li class="list-group-item">User_id: <strong>{{user_id}}</strong></li>
-        <li class="list-group-item">descripción: {{descripción}}</li>
+        <li class="list-group-item">Descripción: {{descripción}}</li>
         <li class="list-group-item">Hace cuanto se pidio: {{tiempoDeCreación}}</li>
-        </div>
-        {{/each}}
     </ul>
+    </div>
+    {{/each}}
 </div>

@@ -14,6 +14,13 @@ module.exports = {
         }
         return res.redirect('/profile');
     },
+    //Filtro Para la ruta del ADMIN, Solo el req.user.cargo == 'Subgerente Operativo' puede acceder.
+    admin(req, res, next){
+        if(req.user.cargo == 'Subgerente Operativo' || req.user.cargo == 'Directora' || req.user.cargo == 'Gerente Operativo') {
+            return next();
+        }
+        return res.redirect('/profile');
+    }
 
 };
 

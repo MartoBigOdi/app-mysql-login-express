@@ -1,15 +1,16 @@
 const { Router } = require('express');
 const router = Router();
-const { estalogeado } = require('../lib/proteccion');
+const { estalogeado, admin } = require('../lib/proteccion');
 
 //Este pool hace referencia a la base de datos.
 const pool = require('../database');
 
-
+//le enviamos la vista.
 router.get('/agregar', estalogeado, (req, res) => {
     res.render('follow/agregar');
 });
 
+//Acá mandamos los datos de la tarea a agregar al usuario que la esta haciendo.
 router.post('/agregar', estalogeado, async (req, res) => {
     const { title, urgencia, descripción } = req.body;
     const nuevaTarea = {
@@ -20,6 +21,7 @@ router.post('/agregar', estalogeado, async (req, res) => {
     };
     //utilizamos la conexión a mysql 'pool' y vamos a hacer una query para pasarle los datos. en este caso es el objeto 'newFollow'. Es una petición asincrona 
     await pool.query('INSERT INTO seguimientoTareas set ?', [nuevaTarea]);
+    await pool.query('INSERT INTO seguimientoTareas2 set ?', [nuevaTarea]);
     //Tiene dos parametros uno es el nombre con el cual vamos guardar el mensaje y el otro es el mensaje en si.
     req.flash('ok', 'Tarea Guardada correctamente');
     res.redirect('/follow');
@@ -43,14 +45,17 @@ router.get('/', estalogeado,  async (req, res) => {
 });
 
 //Ruta Para agregar Tareas a los users desde un dashboard
-router.get('/dashboard', estalogeado, async (req, res) => {
+router.get('/dashboard', admin, async (req, res) => {
     const users  = await pool.query('SELECT * FROM users');
     console.table(users);
     const tablaTareas  = await pool.query('SELECT * FROM seguimientoTareas');
     console.table(tablaTareas);
+    const tablaTareas2  = await pool.query('SELECT * FROM seguimientoTareas2');
+    console.table(tablaTareas2);
     res.render('follow/dashboard', { users, tablaTareas });
 });
 
+//En esta Ruta pasamos los datos tomados a la Base de Datos.
 router.post('/dashboard', estalogeado , async (req, res) => {
     const { title, urgencia, descripción, idUser } = req.body;
     const nuevaTarea = {
